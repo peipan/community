@@ -67,6 +67,12 @@
             <version>1.2.75</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>5.2.4</version>
+        </dependency>
+
 
 
     </dependencies>
@@ -77,6 +83,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>5.2.4</version>
+                <!--	configuration配置 url,user,password不然plugin无法正常使用			-->
+                <configuration>
+                    <!--<url>jdbc:mysql://localhost:3306/community?useUnicode=true&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;characterEncoding=utf-8&amp;serverTimezone=CTT</url>-->
+                    <url>jdbc:mysql:///community?useSSL=true&amp;useUnicode=true&amp;characterEncoding=UTF-8</url>
+                    <user>root</user>
+                    <password>root</password>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
