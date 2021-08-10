@@ -1,5 +1,6 @@
 package com.pei.community.controller;
 
+import com.pei.community.dto.PaginationDTO;
 import com.pei.community.dto.QuestionDTO;
 import com.pei.community.mapper.QuestionMapper;
 import com.pei.community.mapper.UserMapper;
@@ -32,7 +33,10 @@ public class HelloController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model){
+                        Model model,
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "2") Integer size
+                        ){
         Cookie[] cookies = request.getCookies();
         if(cookies != null && cookies.length != 0){
             for(Cookie cookie : cookies){
@@ -47,8 +51,9 @@ public class HelloController {
             }
         }
 
-        List<QuestionDTO> questionList = questionService.list();
-        model.addAttribute("questions", questionList);
+        PaginationDTO paginationDTO = questionService.list(page, size);
+
+        model.addAttribute("pagination", paginationDTO);
         return "index";
     }
 }
