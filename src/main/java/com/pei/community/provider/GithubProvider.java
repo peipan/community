@@ -13,11 +13,12 @@ import java.io.IOException;
  */
 @Component
 public class GithubProvider {
+    //以下是okhttp的代码进行post或者get请求，就不用去html页面进行post和get请求了
     public String getAccessToken(AccessTokenDTO accessTokenDTO){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
+        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO)); //JSON.toJSONString(accessTokenDTO)  使用的是fastjson依赖！
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token")
                 .post(body)
@@ -43,7 +44,8 @@ public class GithubProvider {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
-            GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
+            System.out.println(string);
+            GithubUser githubUser = JSON.parseObject(string, GithubUser.class); //json的对象自动解析成GithubUser对象
             return githubUser;
         } catch (IOException e) {
 

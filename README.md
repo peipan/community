@@ -13,6 +13,10 @@
 
 [spring](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
 
+[spring官方文档](https://docs.spring.io/spring-framework/docs/5.0.3.RELEASE/spring-framework-reference/web.html#spring-web)
+
+[MyBatis Generator](http://mybatis.org/generator/)
+
 [thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
 
 ##工具
@@ -23,5 +27,11 @@
 [Flyway](http://flywaydb.org/getstarted/firststeps/maven) 目前访问不了（2021/07/16）
 
 [lombok](https://projectlombok.org/setup/maven)
+
+
+```bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+```
 
 

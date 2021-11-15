@@ -13,7 +13,7 @@
                         data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">社区</span>
                 </button>
-                <a class="navbar-brand" href="#">社区</a>
+                <a class="navbar-brand" href="/">社区</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -26,7 +26,8 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
 
-                    <li ${session.user != null}>
+                    <li th:if="${session.user != null}">
+
                         <a href="/publish">发布</a>
                     </li>
 
@@ -37,9 +38,9 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">消息中心</a></li>
-                            <li><a href="#">个人资料</a></li>
-                            <li><a href="#">退出登陆</a></li>
+                            <li><a href="/profile/questions">我的问题</a></li>
+
+                            <li><a href="/logout">退出登陆</a></li>
                         </ul>
                     </li>
                     <li th:if="${session.user == null}">

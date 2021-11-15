@@ -17,8 +17,21 @@ body{
     height: 38px;
 }
 
-.text-desc{
+.profile.section {
+    margin-top: 15px;
+}
+
+.text-desc {
     font-size: 12px;
     font-weight: normal;
     color: #999;
+}
+
+.community-menu{
+    color: #999;
+    font-size: 13px;
+}
+
+.jumbotron{
+    margin: 50px;
 }

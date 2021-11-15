@@ -1,27 +1,37 @@
 package com.pei.community.controller;
 
+import com.pei.community.dto.QuestionDTO;
 import com.pei.community.mapper.QuestionMapper;
-import com.pei.community.mapper.UserMapper;
 import com.pei.community.model.Question;
 import com.pei.community.model.User;
+import com.pei.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
 
-    @Autowired
-    private UserMapper userMapper;
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                       Model model){
+        QuestionDTO question = questionService.getById(id);
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
+
+        return "publish";
+    }
 
     @GetMapping("/publish")
     public String publish(){
@@ -30,9 +40,10 @@ public class PublishController {
 
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("tag") String tag,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "id", required = false) Integer id,
             HttpServletRequest request,
             Model model
     ){
@@ -53,20 +64,7 @@ public class PublishController {
             return "publish";
         }
 
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null && cookies.length != 0){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("token")){
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if(user != null){
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
+        User user = (User) request.getSession().getAttribute("user");
         if(user == null){
             model.addAttribute("error", "用户未登录");
             return "publish";
@@ -77,10 +75,11 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGtmCreate(System.currentTimeMillis());
-        question.setGtmModified(question.getGtmCreate());
 
-        questionMapper.create(question);
+        question.setId(id);
+
+        questionService.createOrUpdate(question);//比较重要，就是两个不同的点击发布的时候，一个是直接创建，一个是修改 ，所以需要判断是更新还是直接创建！！！
+        //questionMapper.create(question);
         return "redirect:/";
     }
 }
