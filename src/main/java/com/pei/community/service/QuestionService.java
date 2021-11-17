@@ -15,7 +15,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         //int totalCount = questionMapper.totalCountById(userId);
         QuestionExample example = new QuestionExample();
@@ -111,7 +110,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         //Question question = questionMapper.getById(id);
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null){
@@ -129,6 +128,9 @@ public class QuestionService {
             //创建
             question.setGtmCreate(System.currentTimeMillis());
             question.setGtmModify(question.getGtmCreate());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         }else{
             //更新
@@ -148,7 +150,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);

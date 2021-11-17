@@ -33,6 +33,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                 if(cookie.getName().equals("token")){
                     String token = cookie.getValue();
                     UserExample userExample = new UserExample();
+                    //重构的mybatis-generation，一种自动生成代码的插件
+                    //生成了与数据库交互的代码
                     userExample.createCriteria()
                             .andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
